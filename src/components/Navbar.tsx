@@ -1,0 +1,74 @@
+import { signIn, signOut, useSession } from "next-auth/react";
+import { ArrowRightOnRectangleIcon, Cog8ToothIcon } from "@heroicons/react/20/solid";
+
+
+
+import Link from "next/link";
+
+export const Navbar = () => {
+    const { data: sessionData } = useSession();
+
+    return (
+        <div className="navbar bg-base-200">
+            <div className="navbar-start">
+                <div className="dropdown">
+                    <label tabIndex={0} className="btn btn-ghost lg:hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
+                    </label>
+                    <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+                        <li><a>Ønskeliste</a></li>
+                        <li><a>Begivenheder</a></li>
+                    </ul>
+                </div>
+                <a className="btn btn-ghost normal-case text-xl">Askov</a>
+            </div>
+            <div className="navbar-center hidden lg:flex">
+                <ul className="menu menu-horizontal hover-bordered px-1">
+                    <li><a>Ønskeliste</a></li>
+                    <li><a>Begivenheder</a></li>
+                </ul>
+            </div>
+            <div className="navbar-end">
+                <Avatar />
+            </div>
+        </div>
+    );
+};
+
+const Avatar = () => {
+    const { data: sessionData } = useSession();
+    return (
+        <div >
+            {sessionData?.user ? (
+                <div className="dropdown dropdown-end dropdown-hover">
+                    <div tabIndex={0} className="avatar btn btn-circle btn-ghost w-12 h-12">
+                        <div className="w-10 rounded-full hover">
+                            <img
+                                src={sessionData?.user?.image ?? ""}
+                                alt={sessionData?.user?.name ?? ""}
+                            />
+
+                        </div>
+                    </div>
+                    <div className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                        <li><a>
+                            <Cog8ToothIcon className=" h-5 w-5" />
+                            Settings
+                        </a></li>
+                        <li><a onClick={() => void signOut()}>
+                            <ArrowRightOnRectangleIcon className="h-5 w-5" />
+                            Sign out
+                        </a></li>
+                    </div>
+                </div>
+            ) : (
+                <button
+                    className="btn-ghost rounded-btn btn"
+                    onClick={() => void signIn()}
+                >
+                    Sign In
+                </button>
+            )}
+        </div>
+    )
+}
