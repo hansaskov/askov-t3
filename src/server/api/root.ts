@@ -1,5 +1,5 @@
 import { createTRPCRouter } from "askov/server/api/trpc";
-import { exampleRouter } from "askov/server/api/routers/example";
+import { wishRouter } from "askov/server/api/routers/wish";
 
 /**
  * This is the primary router for your server.
@@ -7,7 +7,7 @@ import { exampleRouter } from "askov/server/api/routers/example";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  example: exampleRouter,
+  wish: wishRouter,
 });
 
 // export type definition of API
