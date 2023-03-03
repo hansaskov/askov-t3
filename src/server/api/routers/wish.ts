@@ -20,7 +20,7 @@ export const wishRouter = createTRPCRouter({
 
   create: protectedProcedure
     .input(z.object({
-      name: z.string(),
+      title: z.string(),
       link: z.string().url().optional(),
       description: z.string().optional(),
       price: z.number().min(0).optional(),
@@ -30,7 +30,7 @@ export const wishRouter = createTRPCRouter({
       return ctx.prisma.wish.create({
         data: {
           userId: ctx.session.user.id,
-          name: input.name,
+          title: input.title,
           link: input.link,
           description: input.description,
           price: input.price,

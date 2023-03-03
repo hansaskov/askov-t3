@@ -6,7 +6,7 @@ import { api } from "askov/utils/api";
 
 import "@total-typescript/ts-reset";
 import "askov/styles/globals.css";
-import MainLayout from "askov/components/layout";
+import MainLayout from "askov/components/Layout";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,

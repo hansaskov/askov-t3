@@ -69,7 +69,7 @@ model VerificationToken {
 model Wish {
     id          String   @id @default(cuid())
     userId      String
-    name        String
+    title       String 
     link        String?
     description String?
     price       Float?
