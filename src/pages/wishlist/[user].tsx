@@ -53,12 +53,10 @@ const WishlistPage: NextPage = () => {
       <div className="bg-slate-100 min-h-screen bg-gradient-to-t from-base-300">
         <div className=" grid p-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-w-full">
           {wishes?.map(wish => (
-            <div className="mx-1">
-              <WishCard wish={wish}
+              <WishCard wish={wish} key={wish.id}
                 onSave={() => void updateWish.mutate({ id: wish.id })}
                 onDelete={() => void deleteWish.mutate({ id: wish.id })}
               />
-            </div>
           ))}
         </div>
         <div className="divider "></div>
