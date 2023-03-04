@@ -23,14 +23,6 @@ const WishlistPage: NextPage = () => {
   const { data: sessionData } = useSession()
   const router = useRouter()
   const username = router.query?.user as string;
-  
-  const dbUser = api.user.getUnique.useQuery({userName: username});
-
-  if (!dbUser) {
-    return <div>User does not exist</div>
-  }
-
-
 
   const { data: wishes, refetch: refetchWishes } = api.wish.getAllFromUserName.useQuery({ userName: username })
 
@@ -139,7 +131,7 @@ export const WishCard = ({
   onDelete,
 }: {
   wish: Wish,
-  onSave: (wish: Wish) => void,
+  onSave?: (wish: Wish) => void,
   onDelete: () => void
 }) => {
 
