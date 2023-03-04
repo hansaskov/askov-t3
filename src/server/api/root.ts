@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "askov/server/api/trpc";
 import { wishRouter } from "askov/server/api/routers/wish";
+import { userRouter } from "./routers/user";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +9,7 @@ import { wishRouter } from "askov/server/api/routers/wish";
  */
 export const appRouter = createTRPCRouter({
   wish: wishRouter,
+  user: userRouter,
 });
 
 // export type definition of API

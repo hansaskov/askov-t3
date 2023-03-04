@@ -1,6 +1,6 @@
 
 import { api } from "askov/utils/api";
-import { type NextPage } from "next";
+import { GetServerSideProps, type NextPage } from "next";
 import { RouterOutputs } from "askov/utils/api"
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -9,7 +9,6 @@ import { useState } from "react";
 import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/20/solid";
 
 type Wish = RouterOutputs["wish"]["getAllFromUserName"][0]
-
 
 const WishlistPage: NextPage = () => {
 
@@ -22,7 +21,18 @@ const WishlistPage: NextPage = () => {
   const [newImageUrl, setNewImageUrl] =       useState<string | undefined>(undefined);
 
   const { data: sessionData } = useSession()
-  const { data: wishes, refetch: refetchWishes } = api.wish.getAllFromUserName.useQuery({ userName: "hansaskov" })
+  const router = useRouter()
+  const username = router.query?.user as string;
+  
+  const dbUser = api.user.getUnique.useQuery({userName: username});
+
+  if (!dbUser) {
+    return <div>User does not exist</div>
+  }
+
+
+
+  const { data: wishes, refetch: refetchWishes } = api.wish.getAllFromUserName.useQuery({ userName: username })
 
   const createWish = api.wish.create.useMutation({
     
@@ -123,7 +133,6 @@ const WishlistPage: NextPage = () => {
 export default WishlistPage;
 
 
-
 export const WishCard = ({
   wish,
   onSave,
@@ -154,3 +163,11 @@ export const WishCard = ({
     </div>
   )
 }
+
+function getPostBySlug(slug: string) {
+  throw new Error("Function not implemented.");
+}
+function getPostByUser(slug: string) {
+  throw new Error("Function not implemented.");
+}
+
