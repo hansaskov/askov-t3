@@ -11,16 +11,12 @@ export const wishRouter = createTRPCRouter({
   getAllFromUserName: publicProcedure
     .input(z.object({ userName: z.string() }))
     .query(({ ctx, input }) => {
-      return ctx.prisma.wish.findMany({ where: { user: {name: input.userName}} })
+      return ctx.prisma.wish.findMany({ where: { user: { name: input.userName } } })
     }),
-
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.wish.findMany();
-  }),
 
   create: protectedProcedure
     .input(z.object({
-      title: z.string(),
+      title: z.string().min(1),
       link: z.string().url().optional(),
       description: z.string().optional(),
       price: z.number().min(0).optional(),
@@ -38,4 +34,36 @@ export const wishRouter = createTRPCRouter({
         }
       })
     }),
+
+  update: protectedProcedure
+    .input(z.object({
+      id: z.string().cuid(),
+      title: z.string().optional(),
+      link: z.string().url().optional(),
+      description: z.string().optional(),
+      price: z.number().min(0).optional(),
+      image: z.string().url().optional()
+    }))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.wish.update({
+        where: { id: input.id },
+        data: {
+          title: input.title,
+          link: input.link,
+          description: input.description,
+          price: input.price,
+          image: input.image
+        }
+      })
+    }),
+
+  delete: protectedProcedure
+    .input(z.object({ id: z.string().cuid() }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.wish.delete({
+        where: {
+          id: input.id
+        }
+      })
+    })
 });
