@@ -34,7 +34,8 @@ export const Navbar = () => {
 
 const Avatar = () => {  
     const { data: sessionData } = useSession();
-    const myWishlist = "/wishlist/" + sessionData?.user?.name;
+    const username = sessionData?.user?.name ?? ""
+    const myWishlist = "/wishlist/" + username;
     return (
         <div >
             {sessionData?.user ? (

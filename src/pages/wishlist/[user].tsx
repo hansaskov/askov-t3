@@ -160,5 +160,3 @@ const WishForm = ({
     </>
   )
 }
-
-
