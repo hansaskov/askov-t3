@@ -21,6 +21,7 @@ specifiers:
   daisyui: ^2.51.3
   eslint: ^8.36.0
   eslint-config-next: 13.1.6
+  husky: ^8.0.3
   next: 13.1.6
   next-auth: ^4.20.1
   postcss: ^8.4.21
@@ -63,6 +64,7 @@ devDependencies:
   daisyui: 2.51.3_j7yt3jd32cwenjqavrrga47yr4
   eslint: 8.36.0
   eslint-config-next: 13.1.6_vgl77cfdswitgr47lm5swmv43m
+  husky: 8.0.3
   postcss: 8.4.21
   prettier: 2.8.4
   prettier-plugin-tailwindcss: 0.2.4_prettier@2.8.4
@@ -1700,6 +1702,12 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
+    dev: true
+
+  /husky/8.0.3:
+    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
+    engines: {node: '>=14'}
+    hasBin: true
     dev: true
 
   /ignore/5.2.4:
