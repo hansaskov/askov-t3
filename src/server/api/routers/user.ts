@@ -3,7 +3,6 @@ import { z } from "zod";
 import {
   createTRPCRouter,
   publicProcedure,
-  protectedProcedure,
 } from "askov/server/api/trpc";
 
 export const userRouter = createTRPCRouter({
@@ -13,6 +12,5 @@ export const userRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.prisma.user.findFirst({ where: { name: input.userName} })
     }),
-
 
 });

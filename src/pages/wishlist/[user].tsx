@@ -1,7 +1,7 @@
 
-import { api, RouterInputs } from "askov/utils/api";
-import { GetServerSideProps, type NextPage } from "next";
-import { RouterOutputs } from "askov/utils/api"
+import { api, type RouterInputs } from "askov/utils/api";
+import { type NextPage } from "next";
+import { type RouterOutputs } from "askov/utils/api"
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -21,12 +21,6 @@ const WishlistPage: NextPage = () => {
   const isOwnedUser: boolean = sessionData?.user.name == username
 
   const createWish = api.wish.create.useMutation({
-    onSuccess: () => {
-      void refetchWishes();
-    },
-  });
-
-  const updateWish = api.wish.update.useMutation({
     onSuccess: () => {
       void refetchWishes();
     },

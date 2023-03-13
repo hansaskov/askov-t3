@@ -1,5 +1,7 @@
-// components/common/MainLayout.tsx
-import React, { PropsWithChildren } from "react";
+
+import React from "react";
+import type { PropsWithChildren } from "react";
+
 import { Navbar } from "./Navbar";
 const MainLayout = ({ children }: PropsWithChildren) => {
   return (
