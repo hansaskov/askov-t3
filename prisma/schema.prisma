@@ -14,12 +14,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -47,6 +41,15 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+}
+
+
 model User {
     id            String    @id @default(cuid())
     name          String?
@@ -60,12 +63,10 @@ model User {
     families      Family[]
 }
 
-model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
-
-    @@unique([identifier, token])
+model Family {
+    id    String @id @default(cuid())
+    name  String
+    users User[]
 }
 
 model Wish {
@@ -81,8 +82,4 @@ model Wish {
     user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Family {
-    id    String @id @default(cuid())
-    name  String
-    users User[]
-}
+
