@@ -6,6 +6,7 @@ import {
   protectedProcedure,
 } from "askov/server/api/trpc";
 
+
 export const wishRouter = createTRPCRouter({
 
   getAllFromUserName: publicProcedure
@@ -59,11 +60,11 @@ export const wishRouter = createTRPCRouter({
 
   delete: protectedProcedure
     .input(z.object({ id: z.string().cuid() }))
-    .mutation(async ({ ctx, input }) => {
+    .mutation(({ ctx, input }) => {
       return ctx.prisma.wish.delete({
         where: {
           id: input.id
         }
       })
-    })
+    }),
 });

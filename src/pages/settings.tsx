@@ -8,6 +8,13 @@ function Settings() {
     const { data: userData, refetch: refetchUser } = api.user.getSessionUser.useQuery();
 
     const [userSettings, setUserSettings] = useState<UpdateUser | null>(null);
+    const [isEditable, setIsEditable] = useState(false);
+    const [dateOfBirth, setDateOfBirth] = useState({
+        day: '',
+        month: '',
+        year: '',
+    });
+
 
     useEffect(() => {
         if (userData) {
@@ -22,11 +29,6 @@ function Settings() {
     }, [userData]);
 
 
-    const [dateOfBirth, setDateOfBirth] = useState({
-        day: '',
-        month: '',
-        year: '',
-    });
 
     useEffect(() => {
         if (userData?.birthDate) {
@@ -38,16 +40,18 @@ function Settings() {
         }
     }, [userData]);
 
-
-      
     const toDate = (date: typeof dateOfBirth) => {
         return dayjs(`${date.year}-${date.month}-${date.day}`).toDate();
-      };
-      
+    };
+
+
+    const toggleEditable = () => {
+        setIsEditable((prevState) => !prevState);
+    };
 
     const updateUser = api.user.update.useMutation({
         onSuccess: () => {
-            void refetchUser();
+            toggleEditable()
         },
     });
 
@@ -77,6 +81,7 @@ function Settings() {
                             </label>
                             <input
                                 type="text"
+                                disabled={!isEditable}
                                 className="input input-bordered w-full shadow"
                                 value={userSettings?.firstName}
                                 onChange={(e) => setUserSettings({ ...userSettings, firstName: e.target.value })}
@@ -89,6 +94,7 @@ function Settings() {
                             </label>
                             <input
                                 type="text"
+                                disabled={!isEditable}
                                 className="input input-bordered w-full shadow"
                                 value={userSettings?.middleName ?? ""}
                                 onChange={(e) => setUserSettings({ ...userSettings, middleName: e.target.value })}
@@ -101,6 +107,7 @@ function Settings() {
                             </label>
                             <input
                                 type="text"
+                                disabled={!isEditable}
                                 className="input input-bordered w-full shadow"
                                 value={userSettings?.lastName}
                                 onChange={(e) => setUserSettings({ ...userSettings, lastName: e.target.value })}
@@ -112,7 +119,10 @@ function Settings() {
                         <label className="label">
                             <span className="label-text">Profile Picture</span>
                         </label>
-                        <input type="file" className="file-input file-input-bordered w-full shadow" />
+                        <input
+                            type="file"
+                            disabled={!isEditable}
+                            className="file-input file-input-bordered w-full shadow" />
                     </div>
                     <div className="form-control mt-4">
                         <label className="label">
@@ -121,6 +131,7 @@ function Settings() {
                         <div className="grid grid-cols-3 gap-4">
                             <input
                                 type="number"
+                                disabled={!isEditable}
                                 className="input input-bordered w-full shadow"
                                 placeholder="DD"
                                 value={dateOfBirth.day}
@@ -130,6 +141,7 @@ function Settings() {
                             />
                             <input
                                 type="number"
+                                disabled={!isEditable}
                                 className="input input-bordered w-full shadow"
                                 placeholder="MM"
                                 value={dateOfBirth.month}
@@ -139,6 +151,7 @@ function Settings() {
                             />
                             <input
                                 type="number"
+                                disabled={!isEditable}
                                 className="input input-bordered w-full shadow"
                                 placeholder="YYYY"
                                 value={dateOfBirth.year}
@@ -154,14 +167,29 @@ function Settings() {
                             <span className="label-text">About You</span>
                         </label>
                         <textarea
+                            disabled={!isEditable}
                             className="textarea textarea-bordered w-full h-24 shadow"
                             value={userSettings?.description ?? ""}
                             onChange={(e) => setUserSettings({ ...userSettings, description: e.target.value })}
                         ></textarea>
                     </div>
 
-                    <div className="text-right mt-8">
-                        <button className="btn btn-primary" onClick={() => void updateUser.mutate({ ...userSettings, birthDate: toDate(dateOfBirth) })}>Save Changes</button>
+                    <div className="flex justify-between mt-8">
+                        <button
+                            className={`btn ${!isEditable ? 'btn-primary' : 'btn-secondary'}`}
+                            onClick={toggleEditable}
+                        >
+                            Edit
+                        </button>
+                        <button
+                            className="btn btn-primary"
+                            onClick={() =>
+                                void updateUser.mutate({ ...userSettings, birthDate: toDate(dateOfBirth)})
+                            }
+                            disabled={!isEditable}
+                        >
+                            Save Changes
+                        </button>
                     </div>
                 </div>
             </div>
