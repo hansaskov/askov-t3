@@ -52,7 +52,7 @@ const LoginPage: React.FC = () => {
                             <label htmlFor="email" className="text-sm font-medium">Email</label>
                             <input type="email" name="email" id="email" required placeholder="Type your email" className="input input-bordered w-full" />
                         </div>
-                        <button type="submit" className="btn btn-primary w-full">Login with Email</button>
+                        <button type="submit" className="btn btn-primary w-full" disabled >Login with Email</button>
                     </form>
                     <div className="text-center my-4 text-gray-500">
                         <span>or</span>
