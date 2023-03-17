@@ -14,7 +14,7 @@ type CreateWish = RouterInputs["wish"]["create"]
 
 const WishlistPage: NextPage = () => {
 
-  const { data: sessionData } = useSession()
+  const { data: sessionData, status: sessionStatus } = useSession()
   const router = useRouter()
   const username = router.query?.user as string;
 
@@ -33,6 +33,14 @@ const WishlistPage: NextPage = () => {
       void refetchWishes();
     },
   });
+
+  if ( !user || sessionStatus === "loading") {
+    return (
+        <div className="container mx-auto p-4 min-h-screen flex flex-col items-center justify-center">
+            <h1 className="text-3xl font-bold mb-4">Loading</h1>
+        </div>
+    );
+}
 
 
   return (
