@@ -1,10 +1,12 @@
 import { api, type RouterInputs } from 'askov/utils/api';
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
+import { useSession } from 'next-auth/react';
 
 type UpdateUser = RouterInputs["user"]["update"]
 
 function Settings() {
+    const { data: sessionData, status: sessionStatus } = useSession();
     const { data: userData, refetch: refetchUser } = api.user.getSessionUser.useQuery();
 
     const [userSettings, setUserSettings] = useState<UpdateUser | null>(null);
@@ -56,7 +58,16 @@ function Settings() {
     });
 
 
-    if (!userData || !userSettings) {
+    if (!userData || !userSettings || sessionStatus === "loading") {
+        return (
+            <div className="container mx-auto p-4 min-h-screen flex flex-col items-center justify-center">
+                <h1 className="text-3xl font-bold mb-4">Loading</h1>
+            </div>
+        );
+    }
+
+
+    if (sessionStatus === "unauthenticated") {
         return (
             <div className="container mx-auto p-4 min-h-screen flex flex-col items-center justify-center">
                 <h1 className="text-3xl font-bold mb-4">Error: Not signed in</h1>
