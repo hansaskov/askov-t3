@@ -14,13 +14,6 @@ const LoginPage: React.FC = () => {
         await signIn(provider, { callbackUrl: callbackUrl as string });
     };
 
-    const handleEmailSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const email = (e.target as HTMLFormElement).elements.namedItem('email') as HTMLInputElement;
-        const callbackUrl = router.query.callbackUrl || '/';
-        await signIn('email', { email: email.value, callbackUrl: callbackUrl as string });
-    };
-
     if (sessionStatus == "loading") {
         return <div>Loading...</div>;
     }
