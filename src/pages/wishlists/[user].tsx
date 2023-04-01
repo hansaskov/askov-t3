@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { formatName } from "askov/formatters/formatName";
+import { useLoading } from "askov/hooks/useLoading";
 
 type Wish = RouterOutputs["wish"]["getAllFromUserName"][0]
 type CreateWish = RouterInputs["wish"]["create"]
@@ -19,7 +20,7 @@ const WishlistPage: NextPage = () => {
   const username = router.query?.user as string;
 
   const { data: wishes, refetch: refetchWishes } = api.wish.getAllFromUserName.useQuery({ userName: username })
-  const { data: user } = api.user.getUnique.useQuery({userName: username})
+  const { data: user } = api.user.getUnique.useQuery({ userName: username })
   const isOwnedUser: boolean = sessionData?.user.name == username
 
   const createWish = api.wish.create.useMutation({
@@ -34,39 +35,35 @@ const WishlistPage: NextPage = () => {
     },
   });
 
-  if ( !user || sessionStatus === "loading") {
-    return (
-        <div className="container mx-auto p-4 min-h-screen flex flex-col items-center justify-center">
-            <h1 className="text-3xl font-bold mb-4">Loading</h1>
-        </div>
-    );
-}
 
+  const LoadingWrapper = useLoading(!user || sessionStatus === "loading", { loadingText: "Loading user data... " });
 
   return (
     <>
-      <div className="bg-slate-100 min-h-screen bg-gradient-to-t from-base-300">
-        <div className="text-center py-4">
-          <h1 className="text-4xl font-semibold ">{formatName(user)}s Wishlist</h1>
+      <LoadingWrapper>
+        <div className="min-h-screen bg-gradient-to-t from-base-300">
+          <div className="text-center py-4">
+            <h1 className="text-4xl font-semibold ">{formatName(user)}s Wishlist</h1>
+          </div>
+          <div className=" grid p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 min-w-full">
+            {wishes?.map(wish => (
+              <WishCard
+                isOwnedUser={isOwnedUser}
+                wish={wish}
+                key={wish.id}
+                onDelete={() => void deleteWish.mutate({ id: wish.id })}
+              />
+            ))}
+          </div>
+          <div>
+            {isOwnedUser &&
+              <WishForm
+                onSave={createWish.mutate}
+              />
+            }
+          </div>
         </div>
-        <div className=" grid p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 min-w-full">
-          {wishes?.map(wish => (
-            <WishCard
-              isOwnedUser={isOwnedUser}
-              wish={wish}
-              key={wish.id}
-              onDelete={() => void deleteWish.mutate({ id: wish.id })}
-            />
-          ))}
-        </div>
-        <div>
-          {isOwnedUser &&
-            <WishForm 
-            onSave={createWish.mutate}
-            />
-          }
-        </div>
-      </div>
+      </LoadingWrapper>
     </>
   );
 };
@@ -103,10 +100,10 @@ const WishCard = ({
 }
 
 
-const WishForm = ({ 
-  onSave, 
-}: { 
-  onSave: (wish: CreateWish) => void, 
+const WishForm = ({
+  onSave,
+}: {
+  onSave: (wish: CreateWish) => void,
 }) => {
   const [newWish, setNewWish] = useState<CreateWish>({
     title: "",
@@ -198,7 +195,7 @@ const WishForm = ({
                   </label>
                   <input type="text" className="input input-bordered" value={newWish.image} onChange={(e) => { setNewWish({ ...newWish, image: e.target.value }) }} placeholder="https://integration.imerco.dk/cdn-cgi/image/width=384,format=auto,quality=65/https://integration.imerco.dk/api/assetstorage/3990_11de1834-9e72-48a6-87e5-7ab39c70c84a" />
                 </div>
-    
+
                 <button
                   className="btn btn-primary mt-2 w-full"
                   onClick={() => void onSave(newWish)}

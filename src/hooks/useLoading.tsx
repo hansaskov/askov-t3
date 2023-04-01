@@ -9,7 +9,7 @@ export function useLoading(isLoading: boolean, options?: UseLoadingOptions) {
     if (isLoading) {
       return (
         <div className="flex items-center justify-center min-h-screen">
-          <div className="text-xl font-semibold text-gray-600">{options?.loadingText || 'Loading...'}</div>
+          <div className="text-4xl font-semibold text-gray-600">{options?.loadingText || 'Loading...'}</div>
         </div>
       );
     }

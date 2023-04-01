@@ -37,11 +37,11 @@ function useSortedFamilyMembers(familyName: string) {
 const Wishlists: NextPage = () => {
   const familyName = "Askov";
   const { sortedUsers, usersStatus } = useSortedFamilyMembers(familyName);
-  const LoadingWrapper = useLoading(usersStatus === 'loading', { loadingText: 'Loading family members...' });
+  const LoadingWrapper = useLoading(usersStatus === 'loading', { loadingText: `Loading family members...` });
 
   return (
     <LoadingWrapper>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 mt-8 lg:px-8">
+      <div className=" min-h-screen bg-gradient-to-t from-base-300">
         <h1 className="text-5xl font-serif text-center mb-8">Fammilien {familyName}</h1>
         <FamilyMembersHorizontal users={sortedUsers} />
       </div>
