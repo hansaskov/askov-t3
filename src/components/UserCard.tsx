@@ -1,5 +1,5 @@
 import { formatName } from "askov/formatters/formatName";
-import { RouterOutputs } from "askov/utils/api";
+import { type RouterOutputs } from "askov/utils/api";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { IoIosArrowForward } from "react-icons/io";

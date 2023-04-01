@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import dayjs from 'dayjs';
-import { api, RouterOutputs } from 'askov/utils/api';
+import { api, type RouterOutputs } from 'askov/utils/api';
 import { useLoading } from 'askov/hooks/useLoading';
 import { FamilyMembersHorizontal } from 'askov/components/FamilyMembersHorizontal';
 
@@ -42,7 +42,7 @@ const Wishlists: NextPage = () => {
   return (
     <LoadingWrapper>
       <div className=" min-h-screen bg-gradient-to-t from-base-300">
-        <h1 className="text-5xl font-serif text-center mb-8">Fammilien {familyName}</h1>
+        <h1 className="text-5xl p-4 font-serif text-center mb-8">Fammilien {familyName}</h1>
         <FamilyMembersHorizontal users={sortedUsers} />
       </div>
     </LoadingWrapper>

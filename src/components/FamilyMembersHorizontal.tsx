@@ -1,8 +1,8 @@
 // FamilyMembersHorizontal.tsx
-import React from 'react';
+import type React from 'react';
 
 import { UserCard } from 'askov/components/UserCard';
-import { RouterOutputs } from 'askov/utils/api';
+import { type RouterOutputs } from 'askov/utils/api';
 type User = RouterOutputs["user"]["getAllFromFamily"][0]
 
 interface FamilyMembersHorizontalProps {

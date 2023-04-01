@@ -4,7 +4,7 @@ import { type NextPage } from "next";
 import { type RouterOutputs } from "askov/utils/api"
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { formatName } from "askov/formatters/formatName";
@@ -79,25 +79,37 @@ const WishCard = ({
   isOwnedUser: boolean,
   onDelete: () => void,
 }) => {
-
   return (
-    <a href={wish.link ?? undefined}>
-      <div className="mx-auto mt-11 w-60 transform overflow-hidden rounded-lg bg-zinc-700 shadow-md duration-300 hover:scale-105 hover:shadow-lg" >
-        <div className="relative" >
-          <img className=" object-cover h-42 w-full " src={wish.image ?? "/placeholder-image.jpg"} alt="Product Image" />
-          {isOwnedUser && <XMarkIcon className="btn p-1 btn-sm text-secondary-content glass absolute top-2  right-2 " onClick={onDelete} />}
-        </div>
-        <div className="p-4">
-          <p className="mb-2 text-base text-neutral-content">{wish.description}</p>
-          <div className="flex items-center text-neutral-content">
-            <p className="mr-2 text-lg font-semibold">{wish.title}</p>
-            <p className="ml-auto text-base font-medium">{wish.price} kr</p>
-          </div>
+    <a href={wish.link ?? undefined} className="block mx-auto my-4 w-64 transform overflow-hidden rounded-lg bg-white shadow-md duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-base-300 focus:ring-indigo-500">
+      <div className="relative h-64">
+        <img className="object-cover h-full w-full" src={wish.image ?? "/placeholder-image.jpg"} alt={`${wish.title}`} />
+        {isOwnedUser && (
+          <button
+            className="btn p-1 btn-sm text-white glass absolute top-2 right-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-base-300 focus:ring-indigo-500"
+            onClick={(e) => {
+              e.preventDefault();
+              onDelete();
+            }}
+          >
+            <XMarkIcon className="w-5 h-5 text-indigo-500" />
+          </button>
+        )}
+      </div>
+      <hr className="border-t border-gray-200" />
+      <div className="p-4">
+        <p className="mb-1 text-xl font-bold text-indigo-600">{wish.title}</p>
+        <p className="mb-2 text-sm text-gray-700">{wish.description}</p>
+        <div className="flex items-center mt-1">
+          <p className="ml-auto text-lg font-semibold text-indigo-500">{wish.price} kr</p>
         </div>
       </div>
     </a>
-  )
-}
+  );
+};
+
+
+
+
 
 
 const WishForm = ({

@@ -1,4 +1,4 @@
-import React, { type FormEvent } from 'react';
+import React from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
