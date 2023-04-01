@@ -43,31 +43,21 @@ const LoginPage: React.FC = () => {
     }
 
     return (
-        <div className="h-screen flex items-center justify-center">
-            <div className="max-w-md p-6 bg-white rounded-lg shadow">
+        <div className="h-screen bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 flex items-center justify-center">
+            <div className="max-w-xl w-full p-10 bg-base-100 rounded-xl shadow-lg">
                 <div className="space-y-6">
-                    <h1 className="text-3xl font-semibold text-center">Login</h1>
-                    <form onSubmit={void handleEmailSubmit} className="space-y-4">
-                        <div className="flex flex-col">
-                            <label htmlFor="email" className="text-sm font-medium">Email</label>
-                            <input type="email" name="email" id="email" required placeholder="Type your email" className="input input-bordered w-full" />
-                        </div>
-                        <button type="submit" className="btn btn-primary w-full" disabled >Login with Email</button>
-                    </form>
-                    <div className="text-center my-4 text-gray-500">
-                        <span>or</span>
-                    </div>
+                    <h1 className="text-4xl font-semibold text-center text-indigo-900">Login</h1>
                     <div className="space-y-2">
                         <button
                             onClick={() => void handleLogin('google')}
-                            className="btn btn-outline btn-primary w-full flex items-center justify-center space-x-2"
+                            className="btn btn-ghost btn-primary btn-lg w-full flex items-center justify-center space-x-2 border-2 border-blue-500 hover:bg-opacity-10 hover:bg-blue-500"
                         >
                             <FcGoogle />
                             <span>Login with Google</span>
                         </button>
                         <button
                             onClick={() => void handleLogin('github')}
-                            className="btn btn-outline btn-dark w-full flex items-center justify-center space-x-2"
+                            className="btn btn-ghost btn-dark btn-lg w-full flex items-center justify-center space-x-2 border-2 border-gray-800 hover:bg-opacity-10 hover:bg-gray-800"
                         >
                             <FaGithub />
                             <span>Login with GitHub</span>
@@ -76,6 +66,7 @@ const LoginPage: React.FC = () => {
                 </div>
             </div>
         </div>
+
     );
 };
 
