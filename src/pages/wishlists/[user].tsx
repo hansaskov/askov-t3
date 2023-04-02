@@ -6,9 +6,11 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { XMarkIcon } from "@heroicons/react/20/solid";
+
+
 import { formatName } from "askov/formatters/formatName";
-import { useLoading } from "askov/hooks/useLoading";
+import { loading } from "askov/components/layout/Loading";
+import { WishCard } from "askov/components/WishCard";
 
 type Wish = RouterOutputs["wish"]["getAllFromUserName"][0]
 type CreateWish = RouterInputs["wish"]["create"]
@@ -20,8 +22,16 @@ const WishlistPage: NextPage = () => {
   const username = router.query?.user as string;
 
   const { data: wishes, refetch: refetchWishes } = api.wish.getAllFromUserName.useQuery({ userName: username })
-  const { data: user } = api.user.getUnique.useQuery({ userName: username })
+  const { data: user, status: userStatus } = api.user.getUnique.useQuery({ userName: username })
   const isOwnedUser: boolean = sessionData?.user.name == username
+
+  const [newWish, setNewWish] = useState<CreateWish>({
+    title: "",
+    description: undefined,
+    image: undefined,
+    price: undefined,
+    link: undefined,
+  });
 
   const createWish = api.wish.create.useMutation({
     onSuccess: () => {
@@ -35,95 +45,55 @@ const WishlistPage: NextPage = () => {
     },
   });
 
-
-  const LoadingWrapper = useLoading(!user || sessionStatus === "loading", { loadingText: "Loading user data... " });
+  if (userStatus === "loading") {
+    return loading({ loadingText: "Loading user info... " })
+  }
 
   return (
     <>
-      <LoadingWrapper>
-        <div className="min-h-screen bg-gradient-to-t from-base-300">
-          <div className="text-center py-4">
-            <h1 className="text-4xl font-semibold ">{formatName(user)}s Wishlist</h1>
-          </div>
-          <div className=" grid p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 min-w-full">
-            {wishes?.map(wish => (
-              <WishCard
-                isOwnedUser={isOwnedUser}
-                wish={wish}
-                key={wish.id}
-                onDelete={() => void deleteWish.mutate({ id: wish.id })}
-              />
-            ))}
-          </div>
-          <div>
-            {isOwnedUser &&
-              <WishForm
-                onSave={createWish.mutate}
-              />
-            }
-          </div>
+      <div className="min-h-screen bg-gradient-to-t from-base-300">
+        <div className="text-center py-4">
+          <h1 className="text-4xl font-semibold ">{formatName(user)}s Wishlist</h1>
         </div>
-      </LoadingWrapper>
+        <div className=" grid p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 min-w-full gap-16">
+          {wishes?.map(wish => (
+            <WishCard
+              isOwnedUser={isOwnedUser}
+              wish={wish}
+              key={wish.id}
+              onDelete={() => void deleteWish.mutate({ id: wish.id })}
+              setNewWish={setNewWish}
+            />
+          ))}
+        </div>
+        <div>
+          {isOwnedUser &&
+            <WishForm
+              onSave={createWish.mutate}
+              newWish={newWish}
+              setNewWish={setNewWish}
+            />
+          }
+        </div>
+      </div>
     </>
   );
 };
 
 export default WishlistPage;
 
-const WishCard = ({
-  wish,
-  isOwnedUser,
-  onDelete,
-}: {
-  wish: Wish,
-  isOwnedUser: boolean,
-  onDelete: () => void,
-}) => {
-  return (
-    <a href={wish.link ?? undefined} className="block mx-auto my-4 w-64 transform overflow-hidden rounded-lg bg-white shadow-md duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-base-300 focus:ring-indigo-500">
-      <div className="relative h-64">
-        <img className="object-cover h-full w-full" src={wish.image ?? "/placeholder-image.jpg"} alt={`${wish.title}`} />
-        {isOwnedUser && (
-          <button
-            className="btn p-1 btn-sm text-white glass absolute top-2 right-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-base-300 focus:ring-indigo-500"
-            onClick={(e) => {
-              e.preventDefault();
-              onDelete();
-            }}
-          >
-            <XMarkIcon className="w-5 h-5 text-indigo-500" />
-          </button>
-        )}
-      </div>
-      <hr className="border-t border-gray-200" />
-      <div className="p-4">
-        <p className="mb-1 text-xl font-bold text-indigo-600">{wish.title}</p>
-        <p className="mb-2 text-sm text-gray-700">{wish.description}</p>
-        <div className="flex items-center mt-1">
-          <p className="ml-auto text-lg font-semibold text-indigo-500">{wish.price} kr</p>
-        </div>
-      </div>
-    </a>
-  );
-};
-
-
-
 
 
 
 const WishForm = ({
   onSave,
+  newWish,
+  setNewWish,
 }: {
   onSave: (wish: CreateWish) => void,
+  newWish: CreateWish,
+  setNewWish: React.Dispatch<React.SetStateAction<CreateWish>>,
 }) => {
-  const [newWish, setNewWish] = useState<CreateWish>({
-    title: "",
-    description: undefined,
-    image: undefined,
-    price: undefined,
-    link: undefined,
-  })
 
   const [inputMethod, setInputMethod] = useState<'manual' | 'fromUrl'>('manual')
   const [url, setUrl] = useState('')

@@ -6,7 +6,7 @@ import { api } from "askov/utils/api";
 
 import "@total-typescript/ts-reset";
 import "askov/styles/globals.css";
-import MainLayout from "askov/components/Layout";
+import MainLayout from "askov/components/layout/Layout";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -17,7 +17,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <MainLayout >
         <Component {...pageProps} />
       </MainLayout>
-      
+
     </SessionProvider>
   );
 };

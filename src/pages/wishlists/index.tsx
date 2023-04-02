@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import dayjs from 'dayjs';
 import { api, type RouterOutputs } from 'askov/utils/api';
-import { useLoading } from 'askov/hooks/useLoading';
-import { FamilyMembersHorizontal } from 'askov/components/FamilyMembersHorizontal';
+import { FamilyMembersHorizontal } from 'askov/components/family/FamilyMembersHorizontal';
+import { loading } from 'askov/components/layout/Loading';
 
 type User = RouterOutputs["user"]["getAllFromFamily"][0]
 
@@ -37,15 +37,17 @@ function useSortedFamilyMembers(familyName: string) {
 const Wishlists: NextPage = () => {
   const familyName = "Askov";
   const { sortedUsers, usersStatus } = useSortedFamilyMembers(familyName);
-  const LoadingWrapper = useLoading(usersStatus === 'loading', { loadingText: `Loading family members...` });
+
+  if (usersStatus === "loading") {
+    return loading({ loadingText: "Loading... " })
+  }
 
   return (
-    <LoadingWrapper>
-      <div className=" min-h-screen bg-gradient-to-t from-base-300">
-        <h1 className="text-5xl p-4 font-serif text-center mb-8">Fammilien {familyName}</h1>
-        <FamilyMembersHorizontal users={sortedUsers} />
-      </div>
-    </LoadingWrapper>
+    <div className=" min-h-screen bg-gradient-to-t from-base-300">
+      <h1 className="text-5xl p-4 font-serif text-center mb-8">Fammilien {familyName}</h1>
+      <FamilyMembersHorizontal users={sortedUsers} />
+    </div>
+
   );
 };
 
